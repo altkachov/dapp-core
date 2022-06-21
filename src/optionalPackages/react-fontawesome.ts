@@ -1,3 +1,2 @@
-import d from '@fortawesome/react-fontawesome';
-export * from '@fortawesome/react-fontawesome';
+import * as d from '@fortawesome/react-fontawesome';
 export default d;

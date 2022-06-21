@@ -1,3 +1,3 @@
-import d from 'react-bootstrap';
-export * from 'react-bootstrap';
-export default d;
+import * as RB from 'react-bootstrap';
+
+export default RB;
