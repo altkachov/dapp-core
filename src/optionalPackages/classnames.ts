@@ -1,6 +1,3 @@
-let classnames: any = {};
-try {
-  classnames = require('classnames');
-} catch (err) {}
-
-export default classnames;
+import d from 'classnames';
+export * from 'classnames';
+export default d;

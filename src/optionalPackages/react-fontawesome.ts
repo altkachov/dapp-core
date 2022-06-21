@@ -1,6 +1,3 @@
-let ReactFontawesome: any = {};
-try {
-  ReactFontawesome = require('@fortawesome/react-fontawesome');
-} catch (err) {}
-
-export default ReactFontawesome;
+import d from '@fortawesome/react-fontawesome';
+export * from '@fortawesome/react-fontawesome';
+export default d;

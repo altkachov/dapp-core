@@ -1,6 +1,3 @@
-let qrcode: any = {};
-try {
-  qrcode = require('qrcode');
-} catch (err) {}
-
-export default qrcode;
+import d from 'qrcode';
+export * from 'qrcode';
+export default d;

@@ -1,6 +1,2 @@
-let moment: any = {};
-try {
-  moment = require('moment');
-} catch (err) {}
-
-export default moment;
+import d from 'moment';
+export default d;

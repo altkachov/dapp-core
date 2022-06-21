@@ -1,6 +1,3 @@
-let fontawesomeFreeSolidIcons: any = {};
-try {
-  fontawesomeFreeSolidIcons = require('@fortawesome/free-solid-svg-icons');
-} catch (err) {}
-
-export default fontawesomeFreeSolidIcons;
+import d from '@fortawesome/free-solid-svg-icons';
+export * from '@fortawesome/free-solid-svg-icons';
+export default d;

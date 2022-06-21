@@ -1,6 +1,3 @@
-let ReactBootstrap: any = {};
-try {
-  ReactBootstrap = require('react-bootstrap');
-} catch (err) {}
-
-export default ReactBootstrap;
+import d from 'react-bootstrap';
+export * from 'react-bootstrap';
+export default d;

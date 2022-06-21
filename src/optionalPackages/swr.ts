@@ -1,6 +1,3 @@
-let swr: any = {};
-try {
-  swr = require('swr').default;
-} catch (err) {}
-
-export default swr;
+import d from 'swr';
+export * from 'swr';
+export default d;
