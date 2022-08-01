@@ -1,21 +1,13 @@
 import React from 'react';
+import classNames from 'classnames';
+import globalStyles from 'assets/sass/main.scss';
 import {
-  denomination as configDenomination,
-  decimals as configDecimals
+  decimals as configDecimals,
+  denomination as configDenomination
 } from 'constants/index';
+import { DenominateType } from 'UI/types/denominate';
 import { denominate, getEgldLabel, stringIsInteger } from 'utils';
-import { withClassNameWrapper } from 'wrappers/withClassNameWrapper';
-
-export interface DenominateType {
-  value: string;
-  showLastNonZeroDecimal?: boolean;
-  showLabel?: boolean;
-  token?: string;
-  decimals?: number;
-  denomination?: number;
-  egldLabel?: string;
-  'data-testid'?: string;
-}
+import styles from './denominate.scss';
 
 const denominateInvalid = (props: DenominateType) => {
   return (
@@ -23,8 +15,11 @@ const denominateInvalid = (props: DenominateType) => {
       data-testid={
         props['data-testid'] ? props['data-testid'] : 'denominateComponent'
       }
+      className={props.className}
     >
-      <span className='int-amount'>...</span>
+      <span className={styles['int-amount']} data-testid='denominateIntAmount'>
+        ...
+      </span>
     </span>
   );
 };
@@ -63,13 +58,24 @@ const denominateValid = (props: DenominateType, erdLabel: string) => {
       data-testid={
         props['data-testid'] ? props['data-testid'] : 'denominateComponent'
       }
+      className={props.className}
     >
-      <span className='int-amount'>{valueParts[0]}</span>
+      <span className={styles['int-amount']} data-testid='denominateIntAmount'>
+        {valueParts[0]}
+      </span>
       {valueParts.length > 1 && (
-        <span className='decimals'>.{valueParts[1]}</span>
+        <span className={styles.decimals} data-testid='denominateDecimals'>
+          .{valueParts[1]}
+        </span>
       )}
       {showLabel && (
-        <span className={`symbol ${props.token ? 'text-muted' : ''}`}>
+        <span
+          className={classNames(
+            styles.symbol,
+            props.token && globalStyles.textMuted
+          )}
+          data-testid='denominateSymbol'
+        >
           &nbsp;{props.token ? props.token : erdLabel}
         </span>
       )}
@@ -77,7 +83,7 @@ const denominateValid = (props: DenominateType, erdLabel: string) => {
   );
 };
 
-const Denominate = (props: DenominateType) => {
+const DenominateComponent = (props: DenominateType) => {
   const { value } = props;
 
   return !stringIsInteger(value)
@@ -85,10 +91,9 @@ const Denominate = (props: DenominateType) => {
     : denominateValid(props, props.egldLabel || '');
 };
 
-const DenominateWrapper = (props: DenominateType) => {
+export const Denominate = (props: DenominateType) => {
   const egldLabel = props.egldLabel || getEgldLabel();
   const denominateProps = { ...props, egldLabel };
-  return <Denominate {...denominateProps} />;
-};
 
-export default withClassNameWrapper(DenominateWrapper);
+  return <DenominateComponent {...denominateProps} />;
+};

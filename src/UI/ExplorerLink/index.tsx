@@ -1,40 +1,35 @@
 import React from 'react';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import { useGetNetworkConfig } from 'hooks';
+import styles from './styles.scss';
+import { WithClassname } from 'UI/types/with-classname';
 
-import icons from 'optionalPackages/fortawesome-free-solid-svg-icons';
-import ReactFontawesome from 'optionalPackages/react-fontawesome';
-import { withClassNameWrapper } from 'wrappers/withClassNameWrapper';
-
-const ExplorerLink = ({
+export const ExplorerLink = ({
   page,
   text,
-  className
+  className = 'dapp-explorer-link'
 }: {
   page: string;
   text?: any;
-  className?: string;
-}) => {
+} & WithClassname) => {
   const {
     network: { explorerAddress }
   } = useGetNetworkConfig();
+
   return (
     <a
       href={`${explorerAddress}${page}`}
-      {...{
-        target: '_blank'
-      }}
-      className={`link-style ${className}`}
+      target='_blank'
+      className={classNames(styles.link, className)}
+      rel='noreferrer'
     >
       {text ? (
-        <React.Fragment>{text}</React.Fragment>
+        <>{text}</>
       ) : (
-        <ReactFontawesome.FontAwesomeIcon
-          icon={icons.faSearch}
-          className='text-secondary'
-        />
+        <FontAwesomeIcon icon={faSearch} className={styles.search} />
       )}
     </a>
   );
 };
-
-export default withClassNameWrapper(ExplorerLink);

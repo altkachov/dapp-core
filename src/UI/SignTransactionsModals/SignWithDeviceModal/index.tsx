@@ -1,18 +1,21 @@
 import React from 'react';
 import { useSignTransactionsWithDevice } from 'hooks';
-import classNames from 'optionalPackages/classnames';
-import ReactBootstrap from 'optionalPackages/react-bootstrap';
 import { SignModalPropsType } from 'types';
-import { getGeneratedClasses, wrapperClassName } from 'utils';
-import SignStep from './SignStep';
+import { ModalContainer } from 'UI/ModalContainer/ModalContainer';
+import { SignStep } from './SignStep';
+import styles from './sign-with-device-modal.scss';
+import globalStyles from 'assets/sass/main.scss';
+import classNames from 'classnames';
+import { WithClassname } from 'UI/types/with-classname';
 
-const SignWithDeviceModal = ({
+export const SignWithDeviceModal = ({
   handleClose,
   error,
-  className = 'device-modal',
+  className = 'dapp-device-modal',
+  modalContentClassName,
   verifyReceiverScam = true,
   title = 'Confirm transaction'
-}: SignModalPropsType) => {
+}: SignModalPropsType & WithClassname) => {
   const {
     onSignTransaction,
     onNext,
@@ -28,43 +31,39 @@ const SignWithDeviceModal = ({
     onCancel: handleClose,
     verifyReceiverScam
   });
-  const classes = getGeneratedClasses(className, true, {
-    wrapper: 'modal-container wallet-connect',
-    container: 'card container',
-    cardBody: 'card-body'
-  });
+  const classes = {
+    wrapper: classNames(styles.modalContainer, styles.walletConnect, className),
+    container: classNames(globalStyles.card, globalStyles.container),
+    cardBody: globalStyles.cardBody
+  };
+
   return (
-    <ReactBootstrap.Modal
-      show={currentTransaction != null}
-      backdrop='static'
-      onHide={handleClose}
-      className={classNames(classes.wrapper, wrapperClassName)}
-      animation={false}
-      centered
+    <ModalContainer
+      onClose={handleClose}
+      modalConfig={{
+        modalDialogClassName: classes.wrapper
+      }}
+      visible={currentTransaction != null}
     >
-      <div className={classes.container}>
-        <div className={classes.cardBody}>
-          <SignStep
-            {...{
-              onSignTransaction,
-              onNext,
-              onPrev,
-              allTransactions,
-              waitingForDevice,
-              isLastTransaction,
-              currentStep,
-              callbackRoute,
-              currentTransaction,
-              handleClose: onAbort,
-              className,
-              error,
-              title
-            }}
-          />
-        </div>
+      <div className={classes.cardBody}>
+        <SignStep
+          {...{
+            onSignTransaction,
+            onNext,
+            onPrev,
+            allTransactions,
+            waitingForDevice,
+            isLastTransaction,
+            currentStep,
+            callbackRoute,
+            currentTransaction,
+            handleClose: onAbort,
+            modalContentClassName,
+            error,
+            title
+          }}
+        />
       </div>
-    </ReactBootstrap.Modal>
+    </ModalContainer>
   );
 };
-
-export default SignWithDeviceModal;

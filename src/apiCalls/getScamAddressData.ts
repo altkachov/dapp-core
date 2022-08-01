@@ -1,14 +1,7 @@
 import axios from 'axios';
-import { networkConfigSelector } from 'redux/selectors';
-import { store } from 'redux/store';
-
-export type ScamInfoType = {
-  scamInfo?: {
-    type: string;
-    info: string;
-  };
-  code: string;
-};
+import { networkConfigSelector } from 'reduxStore/selectors';
+import { store } from 'reduxStore/store';
+import { ScamInfoType } from 'types/account';
 
 export async function getScamAddressData(addressToVerify: string) {
   const {
@@ -24,5 +17,3 @@ export async function getScamAddressData(addressToVerify: string) {
 
   return data;
 }
-
-export default getScamAddressData;

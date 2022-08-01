@@ -1,5 +1,5 @@
-import { updateSignedTransactions } from 'redux/slices';
-import { store } from 'redux/store';
+import { updateSignedTransactions } from 'reduxStore/slices';
+import { store } from 'reduxStore/store';
 import { TransactionBatchStatusesEnum } from 'types';
 
 export function manageTimedOutTransactions(sessionId: string) {
@@ -10,5 +10,3 @@ export function manageTimedOutTransactions(sessionId: string) {
     })
   );
 }
-
-export default manageTimedOutTransactions;

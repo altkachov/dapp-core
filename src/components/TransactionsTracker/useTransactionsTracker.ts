@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { getTransactionsByHashes as defaultGetTxByHash } from 'apiCalls/transactions';
-import { GetTransactionsByHashesType } from 'contexts/types';
-import { useCheckTransactionStatus } from 'hooks';
-import { useGetPendingTransactions } from 'services/transactions';
+import { GetTransactionsByHashesType } from 'types';
+import { useCheckTransactionStatus, useGetPendingTransactions } from 'hooks';
 import { getIsTransactionPending } from 'utils';
 
 export interface TransactionsTrackerType {
@@ -39,5 +38,3 @@ export function useTransactionsTracker(props?: TransactionsTrackerType) {
     };
   }, [pendingBatches]);
 }
-
-export default useTransactionsTracker;

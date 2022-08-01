@@ -1,23 +1,32 @@
 import React from 'react';
-import classNames from 'optionalPackages/classnames';
-import freeSolidIcons from 'optionalPackages/fortawesome-free-solid-svg-icons';
-import ReactBootstrap from 'optionalPackages/react-bootstrap';
+import { faHourglass, faTimes } from '@fortawesome/free-solid-svg-icons';
+import globalStyles from 'assets/sass/main.scss';
 import { SignModalPropsType } from 'types';
-import PageState from 'UI/PageState';
-import { getGeneratedClasses, wrapperClassName, safeRedirect } from 'utils';
+import { ModalContainer } from 'UI/ModalContainer/ModalContainer';
+import { PageState } from 'UI/PageState';
+import { safeRedirect } from 'utils';
+import styles from './sign-with-extension-modal.scss';
+import classNames from 'classnames';
+import { WithClassname } from 'UI/types/with-classname';
 
-const SignWithExtensionModal = ({
+export const SignWithExtensionModal = ({
   handleClose,
   error,
   callbackRoute,
   transactions,
-  className = 'extension-modal'
-}: SignModalPropsType) => {
-  const classes = getGeneratedClasses(className, true, {
-    wrapper: 'modal-container extension',
-    icon: 'text-white',
-    closeBtn: 'btn btn-close-link mt-2'
-  });
+  className = 'dapp-extension-modal',
+  modalContentClassName
+}: SignModalPropsType & WithClassname) => {
+  const classes = {
+    wrapper: classNames(styles.modalContainer, styles.extension, className),
+    icon: globalStyles.textWhite,
+    closeBtn: classNames(
+      globalStyles.btn,
+      globalStyles.btnCloseLink,
+      globalStyles.mt2
+    )
+  };
+
   const description = error
     ? error
     : transactions && transactions.length > 1
@@ -36,19 +45,20 @@ const SignWithExtensionModal = ({
   };
 
   return (
-    <ReactBootstrap.Modal
-      show
-      backdrop='static'
-      onHide={handleClose}
-      className={classNames(classes.wrapper, wrapperClassName)}
-      animation={false}
-      centered
+    <ModalContainer
+      onClose={handleClose}
+      modalConfig={{
+        modalDialogClassName: classes.wrapper
+      }}
+      modalInteractionConfig={{
+        openOnMount: true
+      }}
     >
       <PageState
-        icon={error ? freeSolidIcons.faTimes : freeSolidIcons.faHourglass}
+        icon={error ? faTimes : faHourglass}
         iconClass={classes.icon}
-        className={className}
-        iconBgClass={error ? 'bg-danger' : 'bg-warning'}
+        className={modalContentClassName}
+        iconBgClass={error ? globalStyles.bgDanger : globalStyles.bgWarning}
         iconSize='3x'
         title='Confirm on Maiar DeFi Wallet'
         description={description}
@@ -63,8 +73,6 @@ const SignWithExtensionModal = ({
           </button>
         }
       />
-    </ReactBootstrap.Modal>
+    </ModalContainer>
   );
 };
-
-export default SignWithExtensionModal;

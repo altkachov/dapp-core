@@ -18,6 +18,7 @@ export enum TransactionBatchStatusesEnum {
 export enum LoginMethodsEnum {
   ledger = 'ledger',
   walletconnect = 'walletconnect',
+  walletconnectv2 = 'walletconnectv2',
   wallet = 'wallet',
   extension = 'extension',
   extra = 'extra',
@@ -39,4 +40,25 @@ export enum EnvironmentsEnum {
   testnet = 'testnet',
   devnet = 'devnet',
   mainnet = 'mainnet'
+}
+
+export enum ToastsEnum {
+  custom = 'custom',
+  transaction = 'transaction'
+}
+
+export enum TransactionTypesEnum {
+  MultiESDTNFTTransfer = 'MultiESDTNFTTransfer',
+  ESDTTransfer = 'ESDTTransfer',
+  ESDTNFTTransfer = 'ESDTNFTTransfer',
+  esdtTransaction = 'esdtTransaction',
+  nftTransaction = 'nftTransaction',
+  scCall = 'scCall'
+}
+
+export enum TransactionsDefaultTitles {
+  success = 'Transaction successful',
+  failed = 'Transaction failed',
+  pending = 'Processing transaction',
+  timedOut = 'Transaction timed out'
 }

@@ -1,56 +1,32 @@
-import * as React from 'react';
-import icons from 'optionalPackages/fortawesome-free-solid-svg-icons';
-import ReactFontawesome from 'optionalPackages/react-fontawesome';
+import React from 'react';
+import styles from 'UI/TokenDetails/TokenSymbol/token-symbol.scss';
+import classNames from 'classnames';
+import { WithClassname } from 'UI/types/with-classname';
 
-export const Simple = ({ children }: { children: React.ReactNode }) => (
-  <div className='token-symbol'>{children}</div>
+export const Simple = ({
+  children,
+  className = 'dapp-simple-token-symbol'
+}: { children: React.ReactNode } & WithClassname) => (
+  <div className={classNames(styles.tokenSymbol, className)}>{children}</div>
 );
 
 export const Combined = ({
   small,
-  children
+  children,
+  className = 'dapp-combined-token-symbol'
 }: {
   small: boolean | undefined;
   children: React.ReactNode;
-}) => (
-  <div className={`token-symbol-combined ${small ? 'small' : ''}`}>
+} & WithClassname) => (
+  <div
+    className={classNames(
+      styles.tokenSymbolCombined,
+      {
+        [styles.small]: small
+      },
+      className
+    )}
+  >
     {children}
-  </div>
-);
-
-export const Wrapped = ({ children }: { children: React.ReactNode }) => (
-  <div className='token-symbol-wrapped'>
-    <div className='wrapped rounded-circle shadow'>
-      <div className='locked-icon'>
-        <ReactFontawesome.FontAwesomeIcon icon={icons.faDollarSign} size='sm' />
-      </div>
-      {children}
-    </div>
-  </div>
-);
-
-export const Pool = ({
-  first,
-  second
-}: {
-  first: React.ReactNode;
-  second: React.ReactNode;
-}) => (
-  <div className='token-symbol-pool'>
-    <div className='pool rounded-circle shadow'>
-      {first}
-      <div className='pool-icon'>{second}</div>
-    </div>
-  </div>
-);
-
-export const Locked = ({ children }: { children: React.ReactNode }) => (
-  <div className='token-symbol-locked'>
-    <div className='locked rounded-circle shadow'>
-      <div className='locked-icon'>
-        <ReactFontawesome.FontAwesomeIcon icon={icons.faLock} size='sm' />
-      </div>
-      {children}
-    </div>
   </div>
 );

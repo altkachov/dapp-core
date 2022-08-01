@@ -1,10 +1,11 @@
 import React from 'react';
 import { Address, Transaction } from '@elrondnetwork/erdjs';
+import { IPlainTransactionObject } from '@elrondnetwork/erdjs/out/interface';
 import {
   TransactionBatchStatusesEnum,
-  TransactionServerStatusesEnum
+  TransactionServerStatusesEnum,
+  TransactionTypesEnum
 } from './enums';
-import { IPlainTransactionObject } from '@elrondnetwork/erdjs/out/interface';
 
 export interface TransactionsToSignType {
   transactions: IPlainTransactionObject[];
@@ -32,7 +33,7 @@ export interface TransactionParameter {
   outputParameters: string[];
 }
 
-export interface RawTransactionType extends IPlainTransactionObject {};
+export type RawTransactionType = IPlainTransactionObject;
 
 export interface SignedTransactionType extends RawTransactionType {
   hash: string;
@@ -106,6 +107,7 @@ export interface TransactionsDisplayInfoType {
   processingMessage?: string;
   submittedMessage?: string;
   transactionDuration?: number;
+  timedOutMessage?: string;
 }
 
 export interface SendSimpleTransactionPropsType {
@@ -133,15 +135,6 @@ export interface SignTransactionsPropsType {
   callbackRoute?: string;
   transactionsDisplayInfo: TransactionsDisplayInfoType;
   customTransactionInformation: CustomTransactionInformation;
-}
-
-export enum TransactionTypesEnum {
-  MultiESDTNFTTransfer = 'MultiESDTNFTTransfer',
-  ESDTTransfer = 'ESDTTransfer',
-  ESDTNFTTransfer = 'ESDTNFTTransfer',
-  esdtTransaction = 'esdtTransaction',
-  nftTransaction = 'nftTransaction',
-  scCall = 'scCall'
 }
 
 export interface ActiveLedgerTransactionType {
@@ -174,7 +167,7 @@ export interface SignModalPropsType {
   error: string | null;
   callbackRoute?: string;
   transactions: Transaction[];
-  className?: string;
+  modalContentClassName?: string;
   verifyReceiverScam?: boolean;
   title?: React.ReactNode;
 }
@@ -185,3 +178,29 @@ export interface CustomTransactionInformation {
   completedTransactionsDelay?: number;
   signWithoutSending: boolean;
 }
+
+export interface SendTransactionReturnType {
+  error?: string;
+  sessionId: string | null;
+}
+
+export type GetTransactionsByHashesType = (
+  pendingTransactions: PendingTransactionsType
+) => Promise<GetTransactionsByHashesReturnType>;
+
+export type GetTransactionsByHashesReturnType = {
+  hash: string;
+  invalidTransaction: boolean;
+  status: TransactionServerStatusesEnum;
+  results: SmartContractResult[];
+  sender: string;
+  receiver: string;
+  data: string;
+  previousStatus: string;
+  hasStatusChanged: boolean;
+}[];
+
+export type PendingTransactionsType = {
+  hash: string;
+  previousStatus: string;
+}[];

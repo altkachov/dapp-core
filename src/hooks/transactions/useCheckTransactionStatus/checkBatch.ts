@@ -1,24 +1,24 @@
+import { getTransactionsByHashes as defaultGetTxByHash } from 'apiCalls/transactions';
 import {
-  getTransactionsByHashes as defaultGetTxByHash,
-  GetTransactionsByHashesReturnType
-} from 'apiCalls/transactions';
-import { GetTransactionsByHashesType } from 'contexts/types';
-import { updateSignedTransactionStatus } from 'redux/slices';
-import { store } from 'redux/store';
+  GetTransactionsByHashesReturnType,
+  GetTransactionsByHashesType
+} from 'types';
+import { updateSignedTransactionStatus } from 'reduxStore/slices';
+import { store } from 'reduxStore/store';
 import { TransactionServerStatusesEnum } from 'types/enums';
 import {
   CustomTransactionInformation,
   SignedTransactionsBodyType
-} from 'types/transactions';
+} from 'types';
 import {
   getIsTransactionFailed,
   getIsTransactionPending,
   getIsTransactionSuccessful
 } from 'utils';
 import { refreshAccount } from 'utils/account';
-import getPendingTransactions from './getPendingTransactions';
-import manageFailedTransactions from './manageFailedTransactions';
-import manageTimedOutTransactions from './manageTimedOutTransactions';
+import { getPendingTransactions } from './getPendingTransactions';
+import { manageFailedTransactions } from './manageFailedTransactions';
+import { manageTimedOutTransactions } from './manageTimedOutTransactions';
 
 interface TransactionStatusTrackerPropsType {
   sessionId: string;
@@ -142,5 +142,3 @@ export async function checkBatch({
     console.error(error);
   }
 }
-
-export default checkBatch;

@@ -1,13 +1,9 @@
 import axios from 'axios';
-import { configEndpoint } from 'constants/network';
 import { NetworkType } from 'types';
+import { configEndpoint } from 'apiCalls/endpoints';
 
 export async function getServerConfiguration(apiAddress: string) {
-  const cleanApiAddress = apiAddress.endsWith('/')
-    ? apiAddress.slice(0, -1)
-    : apiAddress;
-
-  const configUrl = `${cleanApiAddress}/${configEndpoint}`;
+  const configUrl = `${apiAddress}/${configEndpoint}`;
 
   try {
     const { data } = await axios.get<NetworkType>(configUrl);

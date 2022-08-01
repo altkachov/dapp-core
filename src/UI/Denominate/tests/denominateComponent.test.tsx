@@ -1,12 +1,20 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Denominate, { DenominateType } from '../index';
+import { DenominateType } from 'UI/types/denominate';
+import { Denominate } from '../index';
 
 const renderComponent = (props: DenominateType) => {
   const methods = render(<Denominate {...props} egldLabel='EGLD' />);
 
   return methods.getByTestId('denominateComponent');
 };
+
+const decimalsSelector = (component: HTMLElement) =>
+  component.querySelectorAll('span[data-testid=denominateDecimals]')[0]
+    ?.textContent;
+
+const symbolSelector = (component: HTMLElement) =>
+  component.querySelectorAll('span[data-testid=denominateSymbol]').length;
 
 describe('Denominate component when decimals = 2', () => {
   it('should show 2 non zero decimals ', () => {
@@ -18,9 +26,8 @@ describe('Denominate component when decimals = 2', () => {
     };
 
     const component = renderComponent(props);
-    expect(component.getElementsByClassName('decimals')[0].textContent).toBe(
-      '.99'
-    );
+
+    expect(decimalsSelector(component)).toBe('.99');
   });
 
   it('should show 2 zero decimals', () => {
@@ -32,9 +39,8 @@ describe('Denominate component when decimals = 2', () => {
     };
 
     const component = renderComponent(props);
-    expect(component.getElementsByClassName('decimals')[0].textContent).toBe(
-      '.00'
-    );
+
+    expect(decimalsSelector(component)).toBe('.00');
   });
 
   it('should show all non zero decimals when showLastNonZeroDecimal = true', () => {
@@ -46,9 +52,7 @@ describe('Denominate component when decimals = 2', () => {
     };
 
     const component = renderComponent(props);
-    expect(component.getElementsByClassName('decimals')[0].textContent).toBe(
-      '.0001'
-    );
+    expect(decimalsSelector(component)).toBe('.0001');
   });
 
   it('should not show decimals when value is 0', () => {
@@ -61,7 +65,7 @@ describe('Denominate component when decimals = 2', () => {
 
     const component = renderComponent(props);
 
-    expect(component.getElementsByClassName('decimals').length).toBe(0);
+    expect(decimalsSelector(component)).toBe(undefined);
   });
 
   it('should show symbol', () => {
@@ -73,7 +77,7 @@ describe('Denominate component when decimals = 2', () => {
     };
 
     const component = renderComponent(props);
-    expect(component.getElementsByClassName('symbol').length).toBe(1);
+    expect(symbolSelector(component)).toBe(1);
   });
 
   it('should not show symbol', () => {
@@ -85,6 +89,6 @@ describe('Denominate component when decimals = 2', () => {
     };
 
     const component = renderComponent(props);
-    expect(component.getElementsByClassName('symbol').length).toBe(0);
+    expect(symbolSelector(component)).toBe(0);
   });
 });

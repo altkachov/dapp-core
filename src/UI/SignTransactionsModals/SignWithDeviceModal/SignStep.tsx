@@ -1,23 +1,25 @@
 import React from 'react';
 import { Address } from '@elrondnetwork/erdjs/out';
-import { useGetNetworkConfig } from 'hooks';
-import useGetTokenDetails from 'hooks/transactions/useGetTokenDetails';
-
-import icons from 'optionalPackages/fortawesome-free-solid-svg-icons';
-import ReactFontawesome from 'optionalPackages/react-fontawesome';
-import { ActiveLedgerTransactionType, MultiSignTxType } from 'types';
-import PageState from 'UI/PageState';
-import ProgressSteps from 'UI/ProgressSteps';
-import TokenDetails from 'UI/TokenDetails';
-import TransactionData from 'UI/TransactionData';
 import {
-  denominate,
-  getEgldLabel,
-  getGeneratedClasses,
-  isTokenTransfer
-} from 'utils';
+  faExclamationTriangle,
+  faHourglass,
+  faTimes
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useGetNetworkConfig } from 'hooks';
+import { useGetTokenDetails } from 'hooks/transactions/useGetTokenDetails';
 
-export interface SignStepType {
+import { ActiveLedgerTransactionType, MultiSignTxType } from 'types';
+import { PageState } from 'UI/PageState';
+import { ProgressSteps } from 'UI/ProgressSteps';
+import { TokenDetails } from 'UI/TokenDetails';
+import { TransactionData } from 'UI/TransactionData';
+import { denominate, getEgldLabel, isTokenTransfer } from 'utils';
+import globalStyles from 'assets/sass/main.scss';
+import { useSignStepsClasses } from './hooks/useSignStepsClasses';
+import { WithClassname } from 'UI/types/with-classname';
+
+export interface SignStepType extends WithClassname {
   onSignTransaction: () => void;
   onPrev: () => void;
   handleClose: () => void;
@@ -29,10 +31,9 @@ export interface SignStepType {
   currentTransaction: ActiveLedgerTransactionType | null;
   allTransactions: MultiSignTxType[];
   isLastTransaction: boolean;
-  className: string;
 }
 
-const SignStep = ({
+export const SignStep = ({
   onSignTransaction,
   handleClose,
   onPrev,
@@ -105,41 +106,20 @@ const SignStep = ({
   const scamReport = currentTransaction.receiverScamInfo;
   const showProgressSteps = allTransactions.length > 1;
 
-  const classes = getGeneratedClasses(className, true, {
-    formGroup: 'form-group text-left',
-    formLabel: 'form-label text-secondary',
-    icon: 'text-white',
-    contentWrapper:
-      'd-flex flex-column justify-content-start flex-md-row justify-content-md-between mb-3',
-    tokenWrapper: 'mb-3 mb-md-0 d-flex flex-column align-items-start',
-    tokenLabel: 'text-secondary text-left',
-    tokenValue: 'd-flex align-items-center mt-1',
-    scamReport: 'text-warning',
-    scamReportIcon: 'text-warning mr-1',
-    tokenAmountLabel: 'text-secondary text-left',
-    tokenAmountValue: 'd-flex align-items-center',
-    dataFormGroup: 'form-group text-left',
-    errorMessage:
-      'text-danger d-flex justify-content-center align-items-center',
-    buttonsWrapper: 'd-flex align-items-center justify-content-end mt-spacer',
-    cancelButton: 'btn btn-dark text-white flex-even mr-2',
-    signButton: `btn ${
-      scamReport ? 'btn-warning' : 'btn-primary'
-    } flex-even ml-2`
-  });
+  const classes = useSignStepsClasses(scamReport);
 
   return (
     <PageState
-      icon={error ? icons.faTimes : icons.faHourglass}
+      icon={error ? faTimes : faHourglass}
       iconClass={classes.icon}
-      iconBgClass={error ? 'bg-danger' : 'bg-warning'}
+      iconBgClass={error ? globalStyles.bgDanger : globalStyles.bgWarning}
       iconSize='3x'
       className={className}
       title={title || 'Confirm on Ledger'}
       description={
-        <React.Fragment>
+        <>
           {currentTransaction.transaction && (
-            <React.Fragment>
+            <>
               {showProgressSteps && (
                 <ProgressSteps
                   totalSteps={allTransactions.length}
@@ -149,15 +129,15 @@ const SignStep = ({
               )}
 
               <div className={classes.formGroup} data-testid='transactionTitle'>
-                <div className={classes.formLabel}>To: </div>
+                <div className={classes.formLabel}>To </div>
                 {multiTxData
                   ? new Address(receiver).bech32()
                   : currentTransaction.transaction.getReceiver().toString()}
                 {scamReport && (
                   <div className={classes.scamReport}>
                     <span>
-                      <ReactFontawesome.FontAwesomeIcon
-                        icon={icons.faExclamationTriangle}
+                      <FontAwesomeIcon
+                        icon={faExclamationTriangle}
                         className={classes.scamReportIcon}
                       />
                       <small>{scamReport}</small>
@@ -168,7 +148,7 @@ const SignStep = ({
 
               <div className={classes.contentWrapper}>
                 <div className={classes.tokenWrapper}>
-                  <div className={classes.tokenlabel}>Token</div>
+                  <div className={classes.tokenLabel}>Token</div>
                   <div className={classes.tokenValue}>
                     <TokenDetails.Icon
                       tokenAvatar={tokenAvatar}
@@ -199,9 +179,9 @@ const SignStep = ({
                 )}
               </div>
               {error && <p className={classes.errorMessage}>{error}</p>}
-            </React.Fragment>
+            </>
           )}
-        </React.Fragment>
+        </>
       }
       action={
         <div className={classes.buttonsWrapper}>
@@ -229,5 +209,3 @@ const SignStep = ({
     />
   );
 };
-
-export default SignStep;

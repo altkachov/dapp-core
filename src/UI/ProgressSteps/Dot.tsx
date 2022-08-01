@@ -1,12 +1,20 @@
 import React from 'react';
+import globalStyles from 'assets/sass/main.scss';
+import { WithClassname } from 'UI/types/with-classname';
+import classNames from 'classnames';
 
-const Dot = ({
+export const Dot = ({
   color,
-  'data-testid': dataTestId
+  'data-testid': dataTestId,
+  className = 'dapp-dot'
 }: {
   color: string;
   'data-testid'?: string;
-}) => {
-  return <span className={`dot ${color}`} data-testid={dataTestId} />;
+} & WithClassname) => {
+  return (
+    <span
+      className={classNames(globalStyles.dot, color, className)}
+      data-testid={dataTestId}
+    />
+  );
 };
-export default Dot;

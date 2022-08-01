@@ -5,9 +5,9 @@ import {
   gasLimit as configGasLimit,
   gasPerDataByte
 } from 'constants/index';
-import newTransaction from 'models/newTransaction';
-import { addressSelector, chainIDSelector } from 'redux/selectors';
-import { store } from 'redux/store';
+import { newTransaction } from 'models/newTransaction';
+import { addressSelector, chainIDSelector } from 'reduxStore/selectors';
+import { store } from 'reduxStore/store';
 import { SendSimpleTransactionPropsType } from 'types';
 import { getAccount, getLatestNonce } from 'utils';
 
@@ -40,7 +40,7 @@ export async function transformAndSignTransactions({
       receiver,
       data = '',
       chainID,
-      version,
+      version = 1,
       options,
       gasPrice = configGasPrice,
       gasLimit = calculateGasLimit(tx.data)
@@ -67,10 +67,8 @@ export async function transformAndSignTransactions({
       nonce: Number(nonce.valueOf().toString()),
       sender: new Address(address).hex(),
       chainID: transactionsChainId,
-      version: version ?? 1,
-      options,
+      version: version,
+      options
     });
   });
 }
-
-export default transformAndSignTransactions;

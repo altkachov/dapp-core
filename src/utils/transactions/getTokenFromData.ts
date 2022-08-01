@@ -1,8 +1,8 @@
 import { Address } from '@elrondnetwork/erdjs';
 import BigNumber from 'bignumber.js';
-import addressIsValid from 'utils/account/addressIsValid';
-import decodePart from 'utils/decoders/decodePart';
-import { TransactionTypesEnum } from '../../types/transactions';
+import { TransactionTypesEnum } from 'types/enums';
+import { addressIsValid } from 'utils/account/addressIsValid';
+import { decodePart } from 'utils/decoders/decodePart';
 
 const noData = {
   tokenId: '',
@@ -19,7 +19,9 @@ const decodeData = (data: string) => {
   return decodedParts;
 };
 
-export function getTokenFromData(data?: string): {
+export function getTokenFromData(
+  data?: string
+): {
   tokenId: string;
   amount: string;
   collection?: string;
@@ -56,8 +58,13 @@ export function getTokenFromData(data?: string): {
 
   if (nftTransfer) {
     try {
-      const [, /*ESDTNFTTransfer*/ collection, nonce, quantity, receiver] =
-        decodeData(data);
+      const [
+        ,
+        /*ESDTNFTTransfer*/ collection,
+        nonce,
+        quantity,
+        receiver
+      ] = decodeData(data);
       if (
         [collection, nonce, quantity, receiver].every((el) => Boolean(el)) &&
         addressIsValid(new Address(receiver).bech32())
@@ -75,4 +82,3 @@ export function getTokenFromData(data?: string): {
 
   return noData;
 }
-export default getTokenFromData;
